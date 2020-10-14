@@ -25,27 +25,31 @@ const headers = [
 const flatpickr = {
   type: "Date",
   isEdit: true,
-  run: (nm, v, attrs, cls) =>
-    input({
-      type: "text",
-      class: ["form-control", cls],
-      name: text_attr(nm),
-      disabled: attrs.disabled,
-      id: `input${text_attr(nm)}`,
-      ...(typeof v !== "undefined" &&
-        v !== null && {
-          value: text_attr(
-            typeof v === "string" ? v : v ? v.toISOString() : undefined
-          ),
-        }),
-    }) +
-    script(
-      domReady(
-        `$('#input${text(
-          nm
-        )}').flatpickr({enableTime: true,dateFormat: "Y-m-d H:i"});`
+  run: (nm, v, attrs, cls) => {
+    const rndid = Math.floor(Math.random() * 16777215).toString(16);
+    return (
+      input({
+        type: "text",
+        class: ["form-control", cls],
+        name: text_attr(nm),
+        disabled: attrs.disabled,
+        id: `input${text_attr(nm)}${rndid}`,
+        ...(typeof v !== "undefined" &&
+          v !== null && {
+            value: text_attr(
+              typeof v === "string" ? v : v ? v.toISOString() : undefined
+            ),
+          }),
+      }) +
+      script(
+        domReady(
+          `console.log("flatpick");$('#input${text(
+            nm
+          )}${rndid}').flatpickr({enableTime: true,dateFormat: "Y-m-d H:i"});`
+        )
       )
-    ),
+    );
+  },
 };
 
 module.exports = {
