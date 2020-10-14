@@ -32,11 +32,12 @@ const flatpickr = {
       name: text_attr(nm),
       disabled: attrs.disabled,
       id: `input${text_attr(nm)}`,
-      ...(typeof v !== "undefined" && {
-        value: text_attr(
-          typeof v === "string" ? v : v ? v.toISOString() : undefined
-        ),
-      }),
+      ...(typeof v !== "undefined" &&
+        v !== null && {
+          value: text_attr(
+            typeof v === "string" ? v : v ? v.toISOString() : undefined
+          ),
+        }),
     }) +
     script(
       domReady(
