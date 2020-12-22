@@ -6,7 +6,7 @@ const {
   domReady,
   text_attr,
 } = require("@saltcorn/markup/tags");
-
+const range_filter = require("./date-range-filter");
 const headers = [
   {
     script:
@@ -56,4 +56,5 @@ module.exports = {
   sc_plugin_api_version: 1,
   fieldviews: { flatpickr },
   headers,
+  viewtemplates: [range_filter],
 };

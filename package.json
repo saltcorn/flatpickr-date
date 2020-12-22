@@ -4,13 +4,13 @@
   "description": "Date/Time picker for Date fields",
   "main": "index.js",
   "dependencies": {
+    "@saltcorn/data": "^0.3.0",
     "@saltcorn/markup": "^0.2.0"
   },
   "author": "Tom Nielsen",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^25.1.0",
-    "@saltcorn/data": "^0.2.0"
+    "jest": "^25.1.0"
   },
   "repository": "github:saltcorn/flatpickr-date",
   "jest": {
