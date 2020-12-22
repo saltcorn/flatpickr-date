@@ -43,6 +43,12 @@ const run = async (table_id, viewname, { date_field }, state, extra) => {
   const fields = await table.getFields();
   const field = fields.find((f) => f.name === date_field);
   const name = text_attr(field.name);
+  const set_initial =
+    state[`_fromdate_${name}`] && state[`_todate_${name}`]
+      ? `defaultDate: ["${state[`_fromdate_${name}`]}", "${
+          state[`_todate_${name}`]
+        }"],`
+      : "";
   return (
     input({
       type: "text",
@@ -53,7 +59,7 @@ const run = async (table_id, viewname, { date_field }, state, extra) => {
     script(
       domReady(
         `$('#daterangefilter${name}').flatpickr({mode:'range',
-        dateFormat: "Y-m-d H:i",
+        dateFormat: "Y-m-d",${set_initial}
         onChange: function(selectedDates, dateStr, instance) {
             if(selectedDates.length==2) {
                 set_state_fields({_fromdate_${name}: selectedDates[0].toLocaleDateString('en-CA'), _todate_${name}: selectedDates[1].toLocaleDateString('en-CA') })
