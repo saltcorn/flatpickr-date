@@ -43,7 +43,7 @@ const flatpickr = {
       }) +
       script(
         domReady(
-          `console.log("flatpick");$('#input${text(
+          `$('#input${text(
             nm
           )}${rndid}').flatpickr({enableTime: true,dateFormat: "Y-m-d H:i"});`
         )
