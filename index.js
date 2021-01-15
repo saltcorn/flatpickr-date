@@ -25,8 +25,26 @@ const headers = [
 const flatpickr = {
   type: "Date",
   isEdit: true,
+  configFields: [
+    {
+      name: "allow_input",
+      label: "Allow input",
+      type: "Bool",
+    },
+    {
+      name: "day_only",
+      label: "Only day",
+      type: "Bool",
+      //sublabel: "Do not pick time",
+    },
+  ],
   run: (nm, v, attrs, cls) => {
     const rndid = Math.floor(Math.random() * 16777215).toString(16);
+    const opts = {
+      enableTime: !attrs.day_only,
+      allowInput: attrs.allow_input,
+      dateFormat: attrs.day_only ? "Y-m-d" : "Y-m-d H:i",
+    };
     return (
       input({
         type: "text",
@@ -43,9 +61,7 @@ const flatpickr = {
       }) +
       script(
         domReady(
-          `$('#input${text(
-            nm
-          )}${rndid}').flatpickr({enableTime: true,dateFormat: "Y-m-d H:i"});`
+          `$('#input${text(nm)}${rndid}').flatpickr(${JSON.stringify(opts)});`
         )
       )
     );
