@@ -43,7 +43,9 @@ const flatpickr = {
     const opts = {
       enableTime: !attrs.day_only,
       allowInput: attrs.allow_input,
-      dateFormat: attrs.day_only ? "Y-m-d" : "Y-m-d H:i",
+      dateFormat: attrs.day_only ? "Y-m-d" : "Z",
+      altInput: !attrs.day_only,
+      altFormat: "Y-m-d h:i K",
     };
     return (
       input({
