@@ -65,7 +65,7 @@ const flatpickr = {
     // },
     {
       name: "locale",
-      label: "Language (locale) avialable: es, pt, fr, it, ru, de",
+      label: "Language (locale) availables: es, pt, fr, it, ru, de",
       type: "String"
     },
     {
