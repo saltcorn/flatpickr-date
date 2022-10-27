@@ -7,18 +7,31 @@ const {
   text_attr,
 } = require("@saltcorn/markup/tags");
 const range_filter = require("./date-range-filter");
+const base_headers = `/plugins/public/flatpickr-date@${require("./package.json").version}`
 const headers = [
   {
-    script:
-      "https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6/flatpickr.min.js",
-    integrity:
-      "sha512-Nc36QpQAS2BOjt0g/CqfIi54O6+UWTI3fmqJsnXoU6rNYRq8vIQQkZmkrRnnk4xKgMC3ESWp69ilLpDm6Zu8wQ==",
+    script: `${base_headers}/flatpickr.min.js`
   },
   {
-    css:
-      "https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6/flatpickr.min.css",
-    integrity:
-      "sha512-OtwMKauYE8gmoXusoKzA/wzQoh7WThXJcJVkA29fHP58hBF7osfY0WLCIZbwkeL9OgRCxtAfy17Pn3mndQ4PZQ==",
+    script: `${base_headers}/l10n/es.min.js`
+  },
+  {
+    script: `${base_headers}/l10n/pt.min.js`
+  },
+  {
+    script: `${base_headers}/l10n/fr.min.js`
+  },
+  {
+    script: `${base_headers}/l10n/it.min.js`
+  },
+  {
+    script: `${base_headers}/l10n/de.min.js`
+  },
+  {
+    script: `${base_headers}/l10n/ru.min.js`
+  },
+  {
+    css: `${base_headers}/flatpickr.min.css`,
   },
 ];
 
@@ -37,15 +50,40 @@ const flatpickr = {
       type: "Bool",
       //sublabel: "Do not pick time",
     },
+    {
+      name: "minDate",
+      label: "Min date (Ex: 2022-10-1 or today)",
+      type: "String"
+    },
+    // { Lo dejo comentado para mejoras a futuro
+    //   name: "maxDate",
+    //   label: "Max date (Ex: 2022-10-1 or today)",
+    //   type: "String"
+    // },
+    {
+      name: "locale",
+      label: "Language (locale) available: es, pt, fr, it, ru, de",
+      type: "String"
+    },
+    {
+      name: "dateFormat",
+      label: "Date format",
+      required: true,
+      type: "String",
+      attributes: { options: ["d-m-Y", "Y-m-d"] }
+    }
   ],
   run: (nm, v, attrs, cls) => {
     const rndid = Math.floor(Math.random() * 16777215).toString(16);
     const opts = {
       enableTime: !attrs.day_only,
       allowInput: attrs.allow_input,
-      dateFormat: attrs.day_only ? "Y-m-d" : "Z",
+      dateFormat: attrs.day_only ? attrs.dateFormat : "Z",
       altInput: !attrs.day_only,
-      altFormat: "Y-m-d h:i K",
+      altFormat: attrs.dateFormat + " h:i K",
+      minDate: attrs.minDate,
+      //maxDate: attrs.maxDate,
+      locale: attrs.locale
     };
     return (
       input({
@@ -56,10 +94,10 @@ const flatpickr = {
         id: `input${text_attr(nm)}${rndid}`,
         ...(typeof v !== "undefined" &&
           v !== null && {
-            value: text_attr(
-              typeof v === "string" ? v : v ? v.toISOString() : undefined
-            ),
-          }),
+          value: text_attr(
+            typeof v === "string" ? v : v ? v.toISOString() : undefined
+          ),
+        }),
       }) +
       script(
         domReady(
@@ -73,6 +111,7 @@ const flatpickr = {
 module.exports = {
   sc_plugin_api_version: 1,
   fieldviews: { flatpickr },
+  plugin_name: "flatpickr-date",
   headers,
   viewtemplates: [range_filter],
 };
