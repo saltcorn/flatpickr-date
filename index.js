@@ -63,6 +63,11 @@ const flatpickr = {
     //   type: "String"
     // },
     {
+      name: "default_now",
+      label: "Default to now",
+      type: "Bool",
+    },
+    {
       name: "locale",
       label: "Language (locale) available: es, pt, fr, it, ru, de",
       type: "String",
@@ -87,6 +92,7 @@ const flatpickr = {
       minDate: attrs.minDate,
       //maxDate: attrs.maxDate,
       locale: attrs.locale,
+      defaultDate: attrs.default_now && !v ? new Date() : undefined,
     };
     return (
       input({
