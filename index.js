@@ -69,11 +69,18 @@ const flatpickr = {
       type: "Bool",
     },
     {
+      name: "current_hm",
+      label: "Current hour minute",
+      sublabel: "Set default time of day to current time.",
+      type: "Bool",
+    },
+    {
       name: "locale",
       label: "Language (locale)",
       sublabel: "Available: es, pt, fr, it, ru, de",
       type: "String",
     },
+
     {
       name: "dateFormat",
       label: "Date format",
@@ -95,6 +102,9 @@ const flatpickr = {
       //maxDate: attrs.maxDate,
       locale: attrs.locale,
       defaultDate: attrs.default_now && !v ? new Date() : undefined,
+      defaultHour: attrs.current_hm && !v ? new Date().getHours() : undefined,
+      defaultMinute:
+        attrs.current_hm && !v ? new Date().getMinutes() : undefined,
     };
     return (
       input({
