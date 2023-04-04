@@ -54,8 +54,9 @@ const flatpickr = {
     },
     {
       name: "minDate",
-      label: "Min date (Ex: 2022-10-1 or today)",
+      label: "Min date",
       type: "String",
+      sublabel: "(Ex: 2022-10-1 or today)",
     },
     // { Lo dejo comentado para mejoras a futuro
     //   name: "maxDate",
@@ -69,7 +70,8 @@ const flatpickr = {
     },
     {
       name: "locale",
-      label: "Language (locale) available: es, pt, fr, it, ru, de",
+      label: "Language (locale)",
+      sublabel: "Available: es, pt, fr, it, ru, de",
       type: "String",
     },
     {
