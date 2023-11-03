@@ -10,6 +10,7 @@ const range_filter = require("./date-range-filter");
 const base_headers = `/plugins/public/flatpickr-date@${
   require("./package.json").version
 }`;
+const { getState } = require("@saltcorn/data/db/state");
 const headers = [
   {
     script: `${base_headers}/flatpickr.min.js`,
@@ -106,6 +107,12 @@ const flatpickr = {
       defaultMinute:
         attrs.current_hm && !v ? new Date().getMinutes() : undefined,
     };
+    if (v && typeof v !== "string" && !v.toISOString) {
+      const msg = `flatpickr-date: invalid date ${JSON.stringify(v)}`;
+      const state = getState();
+      if (state.log) state.log(3, msg);
+      else console.log(msg);
+    }
     return (
       input({
         type: "text",
