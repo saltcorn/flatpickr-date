@@ -116,7 +116,11 @@ const flatpickr = {
         ...(typeof v !== "undefined" &&
           v !== null && {
             value: text_attr(
-              typeof v === "string" ? v : v ? v.toISOString() : undefined
+              typeof v === "string"
+                ? v
+                : v
+                ? (typeof v === "number" ? new Date(v) : v).toISOString()
+                : undefined
             ),
           }),
       }) +
