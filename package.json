@@ -1,6 +1,6 @@
 {
   "name": "@saltcorn/flatpickr-date",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Date/Time picker for Date fields",
   "main": "index.js",
   "dependencies": {
