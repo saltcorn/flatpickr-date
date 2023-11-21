@@ -95,9 +95,9 @@ const flatpickr = {
     const opts = {
       enableTime: !attrs.day_only,
       allowInput: attrs.allow_input,
-      dateFormat: attrs.day_only ? "Y-m-d" : "Z",
-      altInput: !attrs.day_only,
-      altFormat: attrs.dateFormat || "Y-m-d H:i",
+      dateFormat: "Z",
+      altInput: true,
+      altFormat: attrs.dateFormat || (attrs.day_only ? "Y-m-d" : "Y-m-d H:i"),
       minDate: attrs.minDate,
       //maxDate: attrs.maxDate,
       locale: attrs.locale,
