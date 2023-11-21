@@ -32,20 +32,41 @@ const configuration_workflow = () =>
                   options: date_fields.join(),
                 },
               },
+              {
+                name: "end_date_field",
+                label: "End date field",
+                type: "String",
+                sublabel:
+                  "Optional. If selecting rows with the beginning and an end, use this for the end field",
+                attributes: {
+                  options: date_fields.join(),
+                },
+              },
+              {
+                name: "placeholder",
+                label: "Placeholder",
+                type: "String",
+              },
             ],
           });
         },
       },
     ],
   });
-const run = async (table_id, viewname, { date_field }, state, extra) => {
-  const table = await Table.findOne({ id: table_id });
-  const fields = await table.getFields();
+const run = async (
+  table_id,
+  viewname,
+  { date_field, end_date_field, placeholder },
+  state,
+  extra
+) => {
+  const table = Table.findOne({ id: table_id });
+  const fields = table.getFields();
   const field = fields.find((f) => f.name === date_field);
   const name = text_attr(field.name);
   const set_initial =
-    state[`_fromdate_${name}`] && state[`_todate_${name}`]
-      ? `defaultDate: ["${state[`_fromdate_${name}`]}", "${
+    state[`_fromdate_${end_date_field || name}`] && state[`_todate_${name}`]
+      ? `defaultDate: ["${state[`_fromdate_${end_date_field || name}`]}", "${
           state[`_todate_${name}`]
         }"],`
       : "";
@@ -55,6 +76,7 @@ const run = async (table_id, viewname, { date_field }, state, extra) => {
       class: "form-control",
       name: `daterangefilter${name}`,
       id: `daterangefilter${name}`,
+      placeholder,
     }) +
     script(
       domReady(
@@ -62,7 +84,12 @@ const run = async (table_id, viewname, { date_field }, state, extra) => {
         dateFormat: "Y-m-d",${set_initial}
         onChange: function(selectedDates, dateStr, instance) {
             if(selectedDates.length==2) {
-                set_state_fields({_fromdate_${name}: selectedDates[0].toLocaleDateString('en-CA'), _todate_${name}: selectedDates[1].toLocaleDateString('en-CA') })
+              ${
+                end_date_field
+                  ? `set_state_fields({_fromdate_${end_date_field}: selectedDates[0].toLocaleDateString('en-CA'), _todate_${name}: selectedDates[1].toLocaleDateString('en-CA') })`
+                  : `set_state_fields({_fromdate_${name}: selectedDates[0].toLocaleDateString('en-CA'), _todate_${name}: selectedDates[1].toLocaleDateString('en-CA') })`
+              }
+                
             }            
         },
     });`
