@@ -47,6 +47,11 @@ const configuration_workflow = () =>
                 label: "Placeholder",
                 type: "String",
               },
+              {
+                name: "future_only",
+                label: "Future dates only",
+                type: "Bool",
+              },
             ],
           });
         },
@@ -56,7 +61,7 @@ const configuration_workflow = () =>
 const run = async (
   table_id,
   viewname,
-  { date_field, end_date_field, placeholder },
+  { date_field, end_date_field, placeholder, future_only },
   state,
   extra
 ) => {
@@ -82,6 +87,7 @@ const run = async (
       domReady(
         `$('#daterangefilter${name}').flatpickr({mode:'range',
         dateFormat: "Y-m-d",${set_initial}
+        minDate: "today",
         onChange: function(selectedDates, dateStr, instance) {
             if(selectedDates.length==2) {
               ${
