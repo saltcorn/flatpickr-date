@@ -89,6 +89,11 @@ const flatpickr = {
       default: "Y-m-d H:i",
       sublabel: `<a href="https://flatpickr.js.org/formatting/">Formatting options</a>`,
     },
+    {
+      name: "placeholder",
+      label: "Placeholder",
+      type: "String",
+    },
   ],
   run: (nm, v, attrs, cls) => {
     const rndid = Math.floor(Math.random() * 16777215).toString(16);
@@ -111,6 +116,7 @@ const flatpickr = {
         type: "text",
         class: ["form-control", cls],
         name: text_attr(nm),
+        placeholder: attrs.placeholder,
         disabled: attrs.disabled,
         id: `input${text_attr(nm)}${rndid}`,
         ...(typeof v !== "undefined" &&
