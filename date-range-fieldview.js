@@ -40,10 +40,17 @@ const flatpickr_date_range = {
         placeholder: attrs.placeholder,
         disabled: attrs.disabled,
         id: `input${text_attr(nm)}${rndid}`,
+        onChange: `console.log('chaneg', this, this.value)`,
       }) +
       script(
         domReady(
-          `$('#input${text(nm)}${rndid}').flatpickr(${JSON.stringify(opts)});`
+          `$('#input${text(nm)}${rndid}').flatpickr({
+            ...${JSON.stringify(opts)},
+            onChange: function(selectedDates, dateStr, instance) {
+              if(selectedDates.length==2) 
+                set_state_fields({_fromdate_${nm}: selectedDates[0].toLocaleDateString('en-CA'), _todate_${nm}: selectedDates[1].toLocaleDateString('en-CA') })                     
+          },
+        });`
         )
       )
     );
