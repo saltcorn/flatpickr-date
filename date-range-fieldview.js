@@ -31,7 +31,7 @@ const flatpickr_date_range = {
       minDate: attrs?.future_only ? "today" : undefined,
       //maxDate: attrs.maxDate,
       locale: attrs.locale,
-      defaultDate: state[nm] || undefined,
+      defaultDate: [state[`_fromdate_${nm}`], state[`_todate_${nm}`]],
     };
     return (
       input({
@@ -40,7 +40,6 @@ const flatpickr_date_range = {
         placeholder: attrs.placeholder,
         disabled: attrs.disabled,
         id: `input${text_attr(nm)}${rndid}`,
-        onChange: `console.log('chaneg', this, this.value)`,
       }) +
       script(
         domReady(
