@@ -87,7 +87,7 @@ const run = async (
       domReady(
         `$('#daterangefilter${name}').flatpickr({mode:'range',
         dateFormat: "Y-m-d",${set_initial}
-        minDate: "today",
+        ${future_only ? `minDate: "today",` : ""}
         onChange: function(selectedDates, dateStr, instance) {
             if(selectedDates.length==2) {
               ${

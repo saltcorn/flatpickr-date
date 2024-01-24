@@ -141,7 +141,10 @@ const flatpickr = {
 
 module.exports = {
   sc_plugin_api_version: 1,
-  fieldviews: { flatpickr },
+  fieldviews: {
+    flatpickr,
+    flatpickr_date_range: require("./date-range-filter.js"),
+  },
   plugin_name: "flatpickr-date",
   headers,
   viewtemplates: [range_filter],
