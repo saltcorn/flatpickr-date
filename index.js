@@ -132,7 +132,13 @@ const flatpickr = {
       }) +
       script(
         domReady(
-          `$('#input${text(nm)}${rndid}').flatpickr(${JSON.stringify(opts)});`
+          `const fp = $('#input${text(nm)}${rndid}').flatpickr(${JSON.stringify(
+            opts
+          )});$('#input${text(
+            nm
+          )}${rndid}').on("set_form_field", ()=>fp.setDate($('#input${text(
+            nm
+          )}${rndid}').val()));`
         )
       )
     );
