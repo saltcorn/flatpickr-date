@@ -118,6 +118,7 @@ const flatpickr = {
         name: text_attr(nm),
         placeholder: attrs.placeholder,
         disabled: attrs.disabled,
+        onchange: attrs.onChange,
         id: `input${text_attr(nm)}${rndid}`,
         ...(typeof v !== "undefined" &&
           v !== null && {
