@@ -155,4 +155,5 @@ module.exports = {
   plugin_name: "flatpickr-date",
   headers,
   viewtemplates: [range_filter],
+  ready_for_mobile: true,
 };
