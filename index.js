@@ -133,13 +133,17 @@ const flatpickr = {
       }) +
       script(
         domReady(
+          //https://github.com/flatpickr/flatpickr/issues/2246#issuecomment-1251078615
           `const fp = $('#input${text(nm)}${rndid}').flatpickr(${JSON.stringify(
             opts
           )});$('#input${text(
             nm
           )}${rndid}').on("set_form_field", ()=>fp.setDate($('#input${text(
             nm
-          )}${rndid}').val()));`
+          )}${rndid}').val()));
+          if (fp.mobileInput) {
+            fp.mobileInput.setAttribute("step", "any")
+          }`
         )
       )
     );
