@@ -10,6 +10,8 @@ const range_filter = require("./date-range-filter");
 const base_headers = `/plugins/public/flatpickr-date@${
   require("./package.json").version
 }`;
+const { getState } = require("@saltcorn/data/db/state");
+
 const headers = [
   {
     script: `${base_headers}/flatpickr.min.js`,
@@ -105,7 +107,7 @@ const flatpickr = {
       altFormat: attrs.dateFormat || (attrs.day_only ? "Y-m-d" : "Y-m-d H:i"),
       minDate: attrs.minDate,
       //maxDate: attrs.maxDate,
-      locale: attrs.locale,
+      locale: attrs.locale || getState().getConfig("default_locale", "en"),
       defaultDate: attrs.default_now && !v ? new Date() : undefined,
       defaultHour: attrs.current_hm && !v ? new Date().getHours() : undefined,
       defaultMinute:
