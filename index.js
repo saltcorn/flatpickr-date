@@ -37,6 +37,9 @@ const headers = [
   {
     css: `${base_headers}/flatpickr.min.css`,
   },
+  {
+    cssDark: `${base_headers}/flatpickr-dark.css`,
+  },
 ];
 
 const flatpickr = {
