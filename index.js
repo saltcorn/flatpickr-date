@@ -116,6 +116,10 @@ const flatpickr = {
       defaultMinute:
         attrs.current_hm && !v ? new Date().getMinutes() : undefined,
     };
+    const prDate = (d) =>
+      attrs.day_only
+        ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getUTCDate()}`
+        : d.toISOString();
     return (
       input({
         type: "text",
@@ -129,9 +133,11 @@ const flatpickr = {
           v !== null && {
             value: text_attr(
               typeof v === "string"
-                ? v
+                ? attrs.day_only
+                  ? prDate(new Date(v))
+                  : v
                 : v
-                ? (typeof v === "number" ? new Date(v) : v).toISOString()
+                ? prDate(typeof v === "number" ? new Date(v) : v)
                 : undefined
             ),
           }),
