@@ -118,8 +118,20 @@ const flatpickr = {
     };
     const prDate = (d) =>
       attrs.day_only
-        ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getUTCDate()}`
+        ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`
         : d.toISOString();
+    const value = typeof v !== "undefined" &&
+      v !== null && {
+        value: text_attr(
+          typeof v === "string"
+            ? attrs.day_only
+              ? prDate(new Date(v))
+              : v
+            : v
+            ? prDate(typeof v === "number" ? new Date(v) : v)
+            : undefined
+        ),
+      };
     return (
       input({
         type: "text",
@@ -129,32 +141,27 @@ const flatpickr = {
         disabled: attrs.disabled,
         onchange: attrs.onChange,
         id: `input${text_attr(nm)}${rndid}`,
-        ...(typeof v !== "undefined" &&
-          v !== null && {
-            value: text_attr(
-              typeof v === "string"
-                ? attrs.day_only
-                  ? prDate(new Date(v))
-                  : v
-                : v
-                ? prDate(typeof v === "number" ? new Date(v) : v)
-                : undefined
-            ),
-          }),
+        ...value,
       }) +
       script(
         domReady(
           //https://github.com/flatpickr/flatpickr/issues/2246#issuecomment-1251078615
-          `const fp = $('#input${text(nm)}${rndid}').flatpickr(${JSON.stringify(
+          `
+          const fp = $('#input${text(nm)}${rndid}').flatpickr(${JSON.stringify(
             opts
-          )});$('#input${text(
+          )});
+          $('#input${text(
             nm
           )}${rndid}').on("set_form_field", ()=>fp.setDate($('#input${text(
             nm
           )}${rndid}').val()));
           if (fp.mobileInput) {
             fp.mobileInput.setAttribute("step", "any")
-          }`
+          }
+          /*
+           value = ${JSON.stringify(value)}
+           v = ${JSON.stringify(v)}
+          */`
         )
       )
     );
