@@ -22,12 +22,22 @@ const flatpickr_date_range = {
       label: "Future dates only",
       type: "Bool",
     },
+    {
+      name: "dateFormat",
+      label: "Date format",
+      required: true,
+      type: "String",
+      default: "Y-m-d H:i",
+      sublabel: `<a href="https://flatpickr.js.org/formatting/">Formatting options</a>`,
+    },
   ],
   run: (nm, v, attrs = {}, cls, required, field, state = {}) => {
     const rndid = Math.floor(Math.random() * 16777215).toString(16);
     const opts = {
       mode: "range",
       dateFormat: "Y-m-d",
+      altInput: !!attrs.dateFormat,
+      altFormat: attrs.dateFormat || undefined,
       minDate: attrs?.future_only ? "today" : undefined,
       //maxDate: attrs.maxDate,
       locale: attrs.locale,
