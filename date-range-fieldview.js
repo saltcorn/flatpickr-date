@@ -27,7 +27,7 @@ const flatpickr_date_range = {
       label: "Date format",
       required: true,
       type: "String",
-      default: "Y-m-d H:i",
+      default: "Y-m-d",
       sublabel: `<a href="https://flatpickr.js.org/formatting/">Formatting options</a>`,
     },
   ],
