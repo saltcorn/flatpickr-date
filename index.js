@@ -102,6 +102,7 @@ const flatpickr = {
   ],
   run: (nm, v, attrs, cls) => {
     const rndid = Math.floor(Math.random() * 16777215).toString(16);
+    const state = getState()
     const opts = {
       enableTime: !attrs.day_only,
       allowInput: attrs.allow_input,
@@ -110,7 +111,7 @@ const flatpickr = {
       altFormat: attrs.dateFormat || (attrs.day_only ? "Y-m-d" : "Y-m-d H:i"),
       minDate: attrs.minDate,
       //maxDate: attrs.maxDate,
-      locale: attrs.locale || getState().getConfig("default_locale", "en"),
+      locale: attrs.locale || state.getConfig("default_locale", "en"),
       defaultDate: attrs.default_now && !v ? new Date() : undefined,
       defaultHour: attrs.current_hm && !v ? new Date().getHours() : undefined,
       defaultMinute:
@@ -130,6 +131,7 @@ const flatpickr = {
             : undefined
         ),
       };
+    state.log(6, `flatpicker: v=${v?.toISOString?.()||v} value=${JSON.stringify(value)}`)
     return (
       input({
         type: "text",
