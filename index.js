@@ -11,10 +11,11 @@ const base_headers = `/plugins/public/flatpickr-date@${
   require("./package.json").version
 }`;
 const { getState } = require("@saltcorn/data/db/state");
+const db = require("@saltcorn/data/db");
 
 const headers = [
   {
-    script: `${base_headers}/flatpickr.min.js`,
+    script: `/static_assets/${db.connectObj.version_tag}/flatpickr.min.js`,
   },
   {
     script: `${base_headers}/l10n/es.min.js`,
@@ -102,7 +103,7 @@ const flatpickr = {
   ],
   run: (nm, v, attrs, cls) => {
     const rndid = Math.floor(Math.random() * 16777215).toString(16);
-    const state = getState()
+    const state = getState();
     const opts = {
       enableTime: !attrs.day_only,
       allowInput: attrs.allow_input,
@@ -131,7 +132,10 @@ const flatpickr = {
             : undefined
         ),
       };
-    state.log(6, `flatpicker: v=${v?.toISOString?.()||v} value=${JSON.stringify(value)}`)
+    state.log(
+      6,
+      `flatpicker: v=${v?.toISOString?.() || v} value=${JSON.stringify(value)}`
+    );
     return (
       input({
         type: "text",
