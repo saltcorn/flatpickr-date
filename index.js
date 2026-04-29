@@ -46,62 +46,78 @@ const headers = [
 const flatpickr = {
   type: "Date",
   isEdit: true,
-  configFields: [
-    {
-      name: "allow_input",
-      label: "Allow input",
-      type: "Bool",
-    },
-    {
-      name: "day_only",
-      label: "Only day",
-      type: "Bool",
-      //sublabel: "Do not pick time",
-    },
-    {
-      name: "minDate",
-      label: "Min date",
-      type: "String",
-      sublabel: "(Ex: 2022-10-1 or today)",
-    },
-    // { Lo dejo comentado para mejoras a futuro
-    //   name: "maxDate",
-    //   label: "Max date (Ex: 2022-10-1 or today)",
-    //   type: "String"
-    // },
-    {
-      name: "default_now",
-      label: "Default to now",
-      type: "Bool",
-    },
-    {
-      name: "current_hm",
-      label: "Current hour minute",
-      sublabel: "Set default time of day to current time.",
-      type: "Bool",
-    },
-    {
-      name: "locale",
-      label: "Language (locale)",
-      sublabel: "Available: es, pt, fr, it, ru, de",
-      type: "String",
-    },
+  configFields: (field, { mode }) => {
+    return [
+      {
+        name: "allow_input",
+        label: "Allow input",
+        type: "Bool",
+      },
+      {
+        name: "day_only",
+        label: "Only day",
+        type: "Bool",
+        //sublabel: "Do not pick time",
+      },
+      {
+        name: "minDate",
+        label: "Min date",
+        type: "String",
+        sublabel: "(Ex: 2022-10-1 or today)",
+      },
+      // { Lo dejo comentado para mejoras a futuro
+      //   name: "maxDate",
+      //   label: "Max date (Ex: 2022-10-1 or today)",
+      //   type: "String"
+      // },
+      {
+        name: "default_now",
+        label: "Default to now",
+        type: "Bool",
+      },
+      {
+        name: "current_hm",
+        label: "Current hour minute",
+        sublabel: "Set default time of day to current time.",
+        type: "Bool",
+      },
+      {
+        name: "locale",
+        label: "Language (locale)",
+        sublabel: "Available: es, pt, fr, it, ru, de",
+        type: "String",
+      },
 
-    {
-      name: "dateFormat",
-      label: "Date format",
-      required: true,
-      type: "String",
-      default: "Y-m-d H:i",
-      sublabel: `<a href="https://flatpickr.js.org/formatting/">Formatting options</a>`,
-    },
-    {
-      name: "placeholder",
-      label: "Placeholder",
-      type: "String",
-    },
-  ],
-  run: (nm, v, attrs, cls) => {
+      {
+        name: "dateFormat",
+        label: "Date format",
+        required: true,
+        type: "String",
+        default: "Y-m-d H:i",
+        sublabel: `<a href="https://flatpickr.js.org/formatting/">Formatting options</a>`,
+      },
+      {
+        name: "placeholder",
+        label: "Placeholder",
+        type: "String",
+      },
+      ...(mode === "filter"
+        ? [
+            {
+              name: "match",
+              label: "Match",
+              type: "String",
+              required: true,
+              attributes: {
+                options: ["Equals", "From date", "To date"],
+              },
+            },
+          ]
+        : []),
+    ];
+  },
+  run: (nm, v, attrs, cls, ...moreargs) => {
+
     const rndid = Math.floor(Math.random() * 16777215).toString(16);
     const state = getState();
     const opts = {
@@ -128,14 +144,23 @@ const flatpickr = {
               ? prDate(new Date(v))
               : v
             : v
-            ? prDate(typeof v === "number" ? new Date(v) : v)
-            : undefined
+              ? prDate(typeof v === "number" ? new Date(v) : v)
+              : undefined,
         ),
       };
     state.log(
       6,
-      `flatpicker: v=${v?.toISOString?.() || v} value=${JSON.stringify(value)}`
+      `flatpicker: v=${v?.toISOString?.() || v} value=${JSON.stringify(value)}`,
     );
+    const optsStr = JSON.stringify(opts).slice(1, -1);
+    let matchStr = "";
+    if (attrs.match && attrs.match !== "Equals") {
+      const matcher = attrs.match.split(" ")[0].toLowerCase();
+      matchStr = `,onChange: function(selectedDates) {
+      set_state_fields({_${matcher}date_${nm}: selectedDates[0].toLocaleDateString('en-CA') })
+      }`;
+    }
+
     return (
       input({
         type: "text",
@@ -143,7 +168,7 @@ const flatpickr = {
         name: text_attr(nm),
         placeholder: attrs.placeholder,
         disabled: attrs.disabled,
-        onchange: attrs.onChange,
+        onchange: attrs.isFilter && matchStr ? undefined : attrs.onChange,
         id: `input${text_attr(nm)}${rndid}`,
         ...value,
       }) +
@@ -151,22 +176,16 @@ const flatpickr = {
         domReady(
           //https://github.com/flatpickr/flatpickr/issues/2246#issuecomment-1251078615
           `
-          const fp = $('#input${text(nm)}${rndid}').flatpickr(${JSON.stringify(
-            opts
-          )});
+          const fp = $('#input${text(nm)}${rndid}').flatpickr({${optsStr}${matchStr}});
           $('#input${text(
-            nm
+            nm,
           )}${rndid}').on("set_form_field", ()=>fp.setDate($('#input${text(
-            nm
+            nm,
           )}${rndid}').val()));
           if (fp.mobileInput) {
             fp.mobileInput.setAttribute("step", "any")
-          }
-          /*
-           value = ${JSON.stringify(value)}
-           v = ${JSON.stringify(v)}
-          */`
-        )
+          }`,
+        ),
       )
     );
   },
