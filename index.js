@@ -159,7 +159,7 @@ const flatpickr = {
       matchStr = `,onChange: function(selectedDates) {
       set_state_fields({${matcher}: selectedDates[0].toLocaleDateString('en-CA') })
       }`;
-      if (urlstate[matcher])
+      if (urlstate?.[matcher])
         value = {
           value: attrs.day_only ? prDate(new Date(urlstate[matcher])) : v,
         };
