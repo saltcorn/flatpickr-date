@@ -116,8 +116,7 @@ const flatpickr = {
         : []),
     ];
   },
-  run: (nm, v, attrs, cls, ...moreargs) => {
-
+  run: (nm, v, attrs, cls, _ignore, _field, urlstate) => {
     const rndid = Math.floor(Math.random() * 16777215).toString(16);
     const state = getState();
     const opts = {
@@ -136,7 +135,7 @@ const flatpickr = {
     };
     const prDate = (d) =>
       attrs.day_only ? d.toISOString().split("T")[0] : d.toISOString();
-    const value = typeof v !== "undefined" &&
+    let value = typeof v !== "undefined" &&
       v !== null && {
         value: text_attr(
           typeof v === "string"
@@ -155,12 +154,18 @@ const flatpickr = {
     const optsStr = JSON.stringify(opts).slice(1, -1);
     let matchStr = "";
     if (attrs.match && attrs.match !== "Equals") {
-      const matcher = attrs.match.split(" ")[0].toLowerCase();
+      const matcherFld = attrs.match.split(" ")[0].toLowerCase();
+      const matcher = `_${matcherFld}date_${nm}`;
       matchStr = `,onChange: function(selectedDates) {
-      set_state_fields({_${matcher}date_${nm}: selectedDates[0].toLocaleDateString('en-CA') })
+      set_state_fields({${matcher}: selectedDates[0].toLocaleDateString('en-CA') })
       }`;
+      if (urlstate[matcher])
+        value = {
+          value: attrs.day_only ? prDate(new Date(urlstate[matcher])) : v,
+        };
     }
-
+    //console.log({value});
+    
     return (
       input({
         type: "text",
