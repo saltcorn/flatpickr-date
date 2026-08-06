@@ -21,6 +21,9 @@ const headers = [
     script: `${base_headers}/l10n/es.min.js`,
   },
   {
+    script: `${base_headers}/l10n/pl.min.js`,
+  },
+  {
     script: `${base_headers}/l10n/pt.min.js`,
   },
   {
@@ -84,7 +87,7 @@ const flatpickr = {
       {
         name: "locale",
         label: "Language (locale)",
-        sublabel: "Available: es, pt, fr, it, ru, de",
+        sublabel: "Available: es, pl, pt, fr, it, ru, de",
         type: "String",
       },
 
